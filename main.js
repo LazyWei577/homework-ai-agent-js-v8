@@ -1,7 +1,16 @@
+import { input } from "@inquirer/prompts";
+import OpenAI from "openai";
 import { OPENAI_API_KEY } from "./config.js";
 
-console.log(
-  OPENAI_API_KEY
-    ? "OPENAI_API_KEY 已設定"
-    : "OPENAI_API_KEY 尚未設定，請先填寫 .env",
-);
+const client = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+const userQuestion = await input({ message: "請輸入你的問題：" });
+
+const response = await client.responses.create({
+  model: "gpt-5.6-luna",
+  instructions:
+    "你是一位專門講關於貓的笑話大師，請用繁體中文回答。請用幽默有趣的方式回應。",
+  input: userQuestion,
+});
+
+console.log(response.output_text);

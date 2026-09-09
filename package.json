@@ -11,6 +11,8 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "dotenv": "^17.4.2"
+    "@inquirer/prompts": "^8.4.3",
+    "dotenv": "^17.4.2",
+    "openai": "^6.38.0"
   }
 }
