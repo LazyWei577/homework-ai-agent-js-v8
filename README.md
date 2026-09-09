@@ -27,6 +27,7 @@ JavaScript / Node.js 版的 AI Agent 教學課程，用 OpenAI Node SDK v6
 | `4.2-mcp-server` | MCP server |
 | `5.1-agent-profile` | 可重用的 Agent profile |
 | `5.2-agent-evaluation` | 固定測資與 rubric 評估 |
+| `5.3-memory-compression` | 本機記憶與摘要壓縮 |
 
 ## 開發環境
 
@@ -39,6 +40,9 @@ cp .env.example .env
 npm start
 npm run eval  # 需要 OPENAI_API_KEY，外部工具使用固定測試資料
 ```
+
+互動模式可輸入 `:memory` 查看目前摘要與近期回合數，輸入 `:clear`
+清除 `.history/memory.json` 裡的對話記憶。
 
 章節 3 起另需 Qdrant；天氣工具另需 OpenWeather API key。金鑰只放在
 `.env` 或 Codespaces secrets，不要提交到 Git。
