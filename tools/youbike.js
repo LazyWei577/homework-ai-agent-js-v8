@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { defineTool } from "../utils/func-tool.js";
+
 const YOUBIKE_API =
   "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json";
 
@@ -15,34 +18,7 @@ function haversine(lat1, lon1, lat2, lon2) {
   return 2 * R * Math.asin(Math.sqrt(a));
 }
 
-export const getNearbyYoubikeTool = {
-  type: "function",
-  name: "get_nearby_youbike",
-  description: "取得指定經緯度座標附近可租借的 YouBike 站點",
-  parameters: {
-    type: "object",
-    properties: {
-      lat: { type: "number", description: "緯度" },
-      lon: { type: "number", description: "經度" },
-      radius: {
-        type: "number",
-        description: "搜尋半徑（公尺），預設 500",
-      },
-      available_amount: {
-        type: "number",
-        description: "至少可租借車輛數，預設 0",
-      },
-      limit: {
-        type: "number",
-        description: "回傳筆數上限，預設 3",
-      },
-    },
-    required: ["lat", "lon"],
-  },
-  strict: false,
-};
-
-export async function getNearbyYoubike({
+async function getNearbyYoubike({
   lat,
   lon,
   radius = 500,
@@ -69,3 +45,22 @@ export async function getNearbyYoubike({
     .sort((a, b) => a.distance - b.distance)
     .slice(0, limit);
 }
+
+export const youbikeTool = defineTool({
+  name: "get_nearby_youbike",
+  description: "取得指定經緯度座標附近可租借的 YouBike 站點",
+  fn: getNearbyYoubike,
+  parameters: z.object({
+    lat: z.number().describe("緯度"),
+    lon: z.number().describe("經度"),
+    radius: z
+      .number()
+      .default(500)
+      .describe("搜尋半徑（公尺），預設 500"),
+    available_amount: z
+      .number()
+      .default(0)
+      .describe("至少可租借車輛數，預設 0"),
+    limit: z.number().default(3).describe("回傳筆數上限，預設 3"),
+  }),
+});

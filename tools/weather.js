@@ -1,24 +1,8 @@
+import { z } from "zod";
 import { OPENWEATHER_API_KEY } from "../config.js";
+import { defineTool } from "../utils/func-tool.js";
 
-export const getWeatherTool = {
-  type: "function",
-  name: "get_weather",
-  description: "取得指定城市的即時天氣資訊，包括溫度、濕度、天氣狀況等。",
-  parameters: {
-    type: "object",
-    properties: {
-      city: {
-        type: "string",
-        description: "城市名稱（英文），如 Taipei 或 Tokyo",
-      },
-    },
-    required: ["city"],
-    additionalProperties: false,
-  },
-  strict: true,
-};
-
-export async function getWeather({ city }) {
+async function getWeather({ city }) {
   const url = new URL("https://api.openweathermap.org/data/2.5/weather");
   url.searchParams.set("q", city);
   url.searchParams.set("appid", OPENWEATHER_API_KEY);
@@ -38,3 +22,12 @@ export async function getWeather({ city }) {
     description: data.weather[0].description,
   };
 }
+
+export const weatherTool = defineTool({
+  name: "get_weather",
+  description: "取得指定城市的即時天氣資訊，包括溫度、濕度、天氣狀況等。",
+  fn: getWeather,
+  parameters: z.object({
+    city: z.string().describe("城市名稱（英文），如 Taipei 或 Tokyo"),
+  }),
+});

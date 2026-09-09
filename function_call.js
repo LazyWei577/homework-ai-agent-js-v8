@@ -1,21 +1,18 @@
 import { client, DEFAULT_MODEL } from "./lib/openai.js";
-import { getWeatherTool, getWeather } from "./tools/weather.js";
-import { getNearbyYoubikeTool, getNearbyYoubike } from "./tools/youbike.js";
 import { spinner } from "./utils/spinner.js";
+import { toOpenAITool } from "./utils/func-tool.js";
+import * as allTools from "./tools/index.js";
 
-const AVAILABLE_TOOLS = {
-  get_weather: getWeather,
-  get_nearby_youbike: getNearbyYoubike,
-};
-
-const tools = [getWeatherTool, getNearbyYoubikeTool];
+const toolList = Object.values(allTools);
+const tools = toolList.map(toOpenAITool);
+const TOOLS_BY_NAME = Object.fromEntries(toolList.map((tool) => [tool.name, tool]));
 const MAX_TOOL_ROUNDS = 8;
 
 const history = [
   {
     role: "user",
     content:
-      "我在台北車站附近，請問現在天氣如何？順便告訴我附近還有沒有 YouBike 可以租？",
+      "現在幾點？我在台北車站附近，請問現在天氣如何？順便告訴我附近還有沒有 YouBike 可以租？",
   },
 ];
 
@@ -47,11 +44,15 @@ for (let round = 1; round <= MAX_TOOL_ROUNDS; round += 1) {
 
   for (const functionCall of functionCalls) {
     const fnName = functionCall.name;
-    const args = JSON.parse(functionCall.arguments);
+    const tool = TOOLS_BY_NAME[fnName];
+    if (!tool) {
+      throw new Error(`模型要求了未註冊的工具：${fnName}`);
+    }
+
+    const args = tool.parameters.parse(JSON.parse(functionCall.arguments));
     console.log(`\n[呼叫 tool] ${fnName}(${JSON.stringify(args)})`);
 
-    const fn = AVAILABLE_TOOLS[fnName];
-    const result = await fn(args);
+    const result = await tool.fn(args);
 
     history.push({
       type: "function_call_output",
