@@ -1,0 +1,16 @@
+{
+  "name": "ai-agent-js-v8",
+  "version": "0.1.0",
+  "description": "AI Agent 實作工作坊（JavaScript 版）",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
