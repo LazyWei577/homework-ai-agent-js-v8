@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^8.4.3",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@openai/agents": "^0.11.4",
     "@qdrant/js-client-rest": "^1.18.0",
     "csv-parse": "^6.2.1",
