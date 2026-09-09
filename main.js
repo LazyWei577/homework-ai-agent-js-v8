@@ -2,6 +2,7 @@ import { input } from "@inquirer/prompts";
 import { Agent, run, MCPServerStdio } from "@openai/agents";
 import { spinner } from "./utils/spinner.js";
 import { toAgentTool } from "./utils/agent-tool.js";
+import { loadAgentsMd, withAgentsMd } from "./lib/agents-md.js";
 import {
   weatherTool,
   youbikeTool,
@@ -12,6 +13,13 @@ import {
 
 const MODEL = "gpt-5.4-mini";
 const MODEL_SETTINGS = { reasoning: { effort: "low" } };
+
+const agentsMd = loadAgentsMd();
+console.log(
+  agentsMd
+    ? `[AGENTS.md] 已載入 ${agentsMd.path}`
+    : "[AGENTS.md] 找不到，班導師只有程式裡的基本指令",
+);
 
 const tenlongMcp = new MCPServerStdio({
   fullCommand: "node mcp-server.js",
@@ -53,13 +61,10 @@ const homeroom = Agent.create({
   name: "班導師",
   model: MODEL,
   modelSettings: MODEL_SETTINGS,
-  instructions: `你是班導師，協助學生回答各種問題。
-- PHP / Laravel 問題請 handoff 給 PHP 老師
-- Vue.js / Nuxt 問題請 handoff 給 Vue 老師
-- Python 問題請 handoff 給 Python 老師
-- 一般生活問題（天氣、時間、YouBike、Netflix 影片）可以直接用 tools 回答
-- 想找書、查天瓏書店資料，請使用 tenlong MCP server 提供的工具
-請用繁體中文回答。`,
+  instructions: withAgentsMd(
+    "你是班導師，協助學生回答各種問題。請用繁體中文回答。",
+    agentsMd,
+  ),
   tools: [
     toAgentTool(currentTimeTool),
     toAgentTool(weatherTool),
