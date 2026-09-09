@@ -28,6 +28,7 @@ JavaScript / Node.js 版的 AI Agent 教學課程，用 OpenAI Node SDK v6
 | `5.1-agent-profile` | 可重用的 Agent profile |
 | `5.2-agent-evaluation` | 固定測資與 rubric 評估 |
 | `5.3-memory-compression` | 本機記憶與摘要壓縮 |
+| `6.1-planner-loop` | 結構化 plan → act → observe |
 
 ## 開發環境
 
@@ -39,6 +40,7 @@ npm install
 cp .env.example .env
 npm start
 npm run eval  # 需要 OPENAI_API_KEY，外部工具使用固定測試資料
+npm run plan  # 先產生結構化計畫，再依序執行允許的工具
 ```
 
 互動模式可輸入 `:memory` 查看目前摘要與近期回合數，輸入 `:clear`
