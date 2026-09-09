@@ -1,37 +1,30 @@
 import { input } from "@inquirer/prompts";
-import OpenAI from "openai";
-import { OPENAI_API_KEY } from "./config.js";
-import { initMessage, addMessage, getMessages } from "./db/messages.js";
-
-const client = new OpenAI({ apiKey: OPENAI_API_KEY });
-
-await initMessage(
-  "你是一位專門講關於貓的笑話大師，請用繁體中文回答。請用幽默有趣的方式回應。"
-);
+import { searchNetflix } from "./lib/qdrant.js";
+import { spinner } from "./utils/spinner.js";
 
 try {
   while (true) {
-    const userQuestion = (
-      await input({ message: "請輸入你的問題：" })
+    const query = (
+      await input({ message: "請輸入要搜尋的影片內容：" })
     ).trim();
 
-    if (userQuestion === "") continue;
-    if (userQuestion.toLowerCase() === "exit") {
+    if (query === "") continue;
+    if (query.toLowerCase() === "exit") {
       console.log("再會~");
       break;
     }
 
-    await addMessage(userQuestion);
+    const spin = spinner("搜尋中...").start();
+    const results = await searchNetflix(query, 5);
+    spin.stop();
 
-    const response = await client.responses.create({
-      model: "gpt-5.6-luna",
-      input: getMessages(),
-    });
-
-    const content = response.output_text;
-    console.log(content);
-
-    await addMessage(content, "assistant");
+    for (const [i, r] of results.entries()) {
+      console.log(`\n${i + 1}. ${r.title} (${r.type}, ${r.release_year})`);
+      console.log(`   分數：${r.score.toFixed(3)}`);
+      console.log(`   分類：${r.listed_in}`);
+      console.log(`   描述：${r.description}`);
+    }
+    console.log();
   }
 } catch (err) {
   if (err.name === "ExitPromptError") {

@@ -5,10 +5,10 @@ import {
   qdrant,
   NETFLIX_COLLECTION,
   EMBEDDING_DIM,
+  EMBEDDING_MODEL,
 } from "../lib/qdrant.js";
 
 const CSV_PATH = "data/netflix_titles.csv";
-const EMBEDDING_MODEL = "text-embedding-3-small";
 const BATCH_SIZE = 100;
 
 function rowToText(row) {
