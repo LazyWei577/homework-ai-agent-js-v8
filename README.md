@@ -29,6 +29,7 @@ JavaScript / Node.js 版的 AI Agent 教學課程，用 OpenAI Node SDK v6
 | `5.2-agent-evaluation` | 固定測資與 rubric 評估 |
 | `5.3-memory-compression` | 本機記憶與摘要壓縮 |
 | `6.1-planner-loop` | 結構化 plan → act → observe |
+| `6.2-feedback-guardrails` | 失敗分類、有限重試與 guardrails |
 
 ## 開發環境
 

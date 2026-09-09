@@ -1,8 +1,15 @@
 import { PlanSchema } from "./schema.js";
+import { executeWithFeedback } from "./feedback.js";
 
 export async function runPlan(
   plan,
-  { handlers, maxSteps = 6, onStep = () => {} } = {},
+  {
+    handlers,
+    maxSteps = 6,
+    maxRetries = 1,
+    onStep = () => {},
+    onFeedback = () => {},
+  } = {},
 ) {
   const validated = PlanSchema.parse(plan);
   const actionHandlers = handlers ?? (await loadDefaultActionHandlers());
@@ -26,14 +33,18 @@ export async function runPlan(
     try {
       const args = parseArguments(step.arguments);
       onStep({ phase: "act", step, args });
-      const output = await handler(args);
-      if (output && typeof output === "object" && output.error) {
-        throw new Error(String(output.error));
-      }
-
-      const observation = { ...step, status: "completed", output };
+      const execution = await executeWithFeedback({
+        step,
+        args,
+        handler,
+        maxRetries,
+        onFeedback,
+      });
+      const observation = { ...step, ...execution };
       observations.push(observation);
       onStep({ phase: "observe", observation });
+
+      if (observation.status === "failed") break;
     } catch (error) {
       const observation = {
         ...step,

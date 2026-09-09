@@ -23,6 +23,12 @@ const result = await runPlan(plan, {
       console.log(`[${event.observation.status}] ${event.observation.reason}`);
     }
   },
+  onFeedback({ step, attempt, error, willRetry }) {
+    console.log(
+      `[feedback] ${step.action} 第 ${attempt} 次失敗：${error}` +
+        (willRetry ? "，再試一次" : "，停止"),
+    );
+  },
 });
 
 console.log("\n執行結果：");
