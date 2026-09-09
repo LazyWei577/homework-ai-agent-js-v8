@@ -1,0 +1,47 @@
+[
+  {
+    "id": "javascript-foundations",
+    "title": "JavaScript 程式設計入門",
+    "summary": "從變數、函式、陣列與非同步開始，建立 Node.js 與前端開發共同需要的 JavaScript 基礎。",
+    "prerequisites": ["不需要程式設計經驗"],
+    "outcomes": ["看懂 JavaScript 語法", "使用 async/await", "拆分 ESM 模組"],
+    "hours": 18,
+    "tags": ["JavaScript", "Node.js", "初學者"]
+  },
+  {
+    "id": "openai-api-foundations",
+    "title": "OpenAI API 與 Responses API 入門",
+    "summary": "用 JavaScript 呼叫 Responses API，處理 instructions、input、output 與多輪對話狀態。",
+    "prerequisites": ["具備 JavaScript 基礎"],
+    "outcomes": ["呼叫 Responses API", "管理對話狀態", "安全使用 API Key"],
+    "hours": 12,
+    "tags": ["AI", "OpenAI API", "Responses API", "JavaScript"]
+  },
+  {
+    "id": "ai-agent-workshop",
+    "title": "AI Agent 實作工作坊",
+    "summary": "從 function tools、tool loop、Agents SDK 與 handoff，做到可使用外部能力的 Agent。",
+    "prerequisites": ["會使用 Responses API", "熟悉 async/await"],
+    "outcomes": ["設計 tool schema", "實作 handoff", "限制 Agent 執行邊界"],
+    "hours": 18,
+    "tags": ["AI Agent", "Tool Calling", "Agents SDK", "MCP"]
+  },
+  {
+    "id": "rag-knowledge-base",
+    "title": "RAG 與文件知識庫實作",
+    "summary": "把 CSV、PDF 與公司內部文件切 chunk、建立 embedding，並以 Qdrant 檢索後交給 Agent 回答。",
+    "prerequisites": ["會呼叫 OpenAI API", "理解 JavaScript 非同步程式"],
+    "outcomes": ["建立 embedding", "設計 chunking", "回答內部文件問題時附上依據"],
+    "hours": 15,
+    "tags": ["RAG", "Qdrant", "Embedding", "PDF", "內部文件"]
+  },
+  {
+    "id": "agent-engineering",
+    "title": "Agent 工程化：Eval、Memory 與 Planning",
+    "summary": "用固定測資、profile、memory compression、planner、feedback 與 guardrails 提升 Agent 的可維護性。",
+    "prerequisites": ["完成 AI Agent 實作工作坊"],
+    "outcomes": ["建立 eval", "壓縮對話記憶", "實作有限重試的 planner"],
+    "hours": 15,
+    "tags": ["Eval", "Memory", "Planning", "Guardrails", "AI Agent"]
+  }
+]
