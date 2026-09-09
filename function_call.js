@@ -1,33 +1,50 @@
 import { client, DEFAULT_MODEL } from "./lib/openai.js";
 import { getWeatherTool, getWeather } from "./tools/weather.js";
+import { getNearbyYoubikeTool, getNearbyYoubike } from "./tools/youbike.js";
 import { spinner } from "./utils/spinner.js";
 
 const AVAILABLE_TOOLS = {
   get_weather: getWeather,
+  get_nearby_youbike: getNearbyYoubike,
 };
 
-const tools = [getWeatherTool];
+const tools = [getWeatherTool, getNearbyYoubikeTool];
+const MAX_TOOL_ROUNDS = 8;
 
-const history = [{ role: "user", content: "請問台北現在天氣如何？" }];
+const history = [
+  {
+    role: "user",
+    content:
+      "我在台北車站附近，請問現在天氣如何？順便告訴我附近還有沒有 YouBike 可以租？",
+  },
+];
 
-const askingSpinner = spinner("思考中...").start();
+let completed = false;
 
-let response = await client.responses.create({
-  model: DEFAULT_MODEL,
-  input: history,
-  tools,
-  tool_choice: "auto",
-});
+for (let round = 1; round <= MAX_TOOL_ROUNDS; round += 1) {
+  const spin = spinner("思考中...").start();
 
-askingSpinner.stop();
+  const response = await client.responses.create({
+    model: DEFAULT_MODEL,
+    input: history,
+    tools,
+    tool_choice: "auto",
+  });
 
-history.push(...response.output);
+  spin.stop();
 
-const functionCalls = response.output.filter(
-  (item) => item.type === "function_call",
-);
+  history.push(...response.output);
 
-if (functionCalls.length > 0) {
+  const functionCalls = response.output.filter(
+    (item) => item.type === "function_call",
+  );
+
+  if (functionCalls.length === 0) {
+    console.log(response.output_text);
+    completed = true;
+    break;
+  }
+
   for (const functionCall of functionCalls) {
     const fnName = functionCall.name;
     const args = JSON.parse(functionCall.arguments);
@@ -42,18 +59,8 @@ if (functionCalls.length > 0) {
       output: JSON.stringify(result),
     });
   }
+}
 
-  const replySpinner = spinner("思考中...").start();
-
-  response = await client.responses.create({
-    model: DEFAULT_MODEL,
-    input: history,
-    tools,
-  });
-
-  replySpinner.stop();
-
-  console.log(response.output_text);
-} else {
-  console.log(response.output_text);
+if (!completed) {
+  throw new Error(`Tool calling 超過 ${MAX_TOOL_ROUNDS} 輪，已停止執行`);
 }
