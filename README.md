@@ -24,6 +24,9 @@ JavaScript / Node.js 版的 AI Agent 教學課程，用 OpenAI Node SDK v6
 | `3.3-rag-tool` | RAG 包成 tool |
 | `3.4-rag-for-pdf` | PDF RAG + recursive splitting |
 | `4.1-agents-sdk` | Agents SDK 多 agent + handoff |
+| `4.2-mcp-server` | MCP server |
+| `5.1-agent-profile` | 可重用的 Agent profile |
+| `5.2-agent-evaluation` | 固定測資與 rubric 評估 |
 
 ## 開發環境
 
@@ -34,6 +37,7 @@ GitHub Codespaces 會依 `.devcontainer/devcontainer.json` 建立 Node.js 22
 npm install
 cp .env.example .env
 npm start
+npm run eval  # 需要 OPENAI_API_KEY，外部工具使用固定測試資料
 ```
 
 章節 3 起另需 Qdrant；天氣工具另需 OpenWeather API key。金鑰只放在

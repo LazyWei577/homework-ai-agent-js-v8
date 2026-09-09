@@ -6,7 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
-    "test": "node --test"
+    "test": "node --test",
+    "eval": "node evals/run-evals.js"
   },
   "engines": {
     "node": ">=22.0.0"
