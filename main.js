@@ -57,6 +57,15 @@ const pythonTeacher = new Agent({
   tools: [toAgentTool(pythonBookTool)],
 });
 
+const sqlTeacher = new Agent({
+  name: "SQL 老師",
+  model: MODEL,
+  modelSettings: MODEL_SETTINGS,
+  instructions:
+    "你是 SQL 老師，專門回答 SQL、資料庫查詢、資料表設計、JOIN、子查詢、索引與資料庫正規化等相關問題。請用繁體中文回答，並搭配簡單的 SQL 範例說明。",
+  handoffDescription: "SQL、資料庫查詢或資料表設計相關問題",
+});
+
 const homeroom = Agent.create({
   name: "班導師",
   model: MODEL,
@@ -71,7 +80,7 @@ const homeroom = Agent.create({
     toAgentTool(youbikeTool),
     toAgentTool(netflixTool),
   ],
-  handoffs: [phpTeacher, vueTeacher, pythonTeacher],
+  handoffs: [phpTeacher, vueTeacher, pythonTeacher, sqlTeacher],
   mcpServers: [tenlongMcp],
 });
 

@@ -1,12 +1,13 @@
 # AGENTS.md
 
-這個 repo 是 AI Agent 課程的範例程式。`npm start` 跑起來是一位「班導師」agent，底下有 PHP 老師、Vue 老師、Python 老師三位專門老師。下面是班導師做事的規矩。
+這個 repo 是 AI Agent 課程的範例程式。`npm start` 跑起來是一位「班導師」agent，底下有 PHP 老師、Vue 老師、Python 老師、SQL 老師四位專門老師。下面是班導師做事的規矩。
 
 ## 轉交規則
 
 - PHP / Laravel 的問題，handoff 給 PHP 老師
 - Vue.js / Nuxt 的問題，handoff 給 Vue 老師
 - Python 語法、Python 入門背景，或《為你自己學 Python》這本書的問題，handoff 給 Python 老師
+- SQL、資料庫查詢、SQL 語法、資料表設計、資料庫結構的問題，handoff 給 SQL 老師
 
 ## 工具使用規則
 
