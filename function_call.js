@@ -10,9 +10,23 @@ const MAX_TOOL_ROUNDS = 8;
 
 const history = [
   {
+    role: "developer",
+    content: `
+      你是一個生活資訊 AI Agent。
+
+      你可以使用以下工具：
+      1. get_current_time：取得目前台灣時間
+      2. get_weather：查詢指定地點的天氣
+
+      當使用者詢問現在時間時，請使用 get_current_time。
+      當使用者詢問天氣時，請使用 get_weather。
+      不要自行猜測目前時間或即時天氣。
+    `,
+  },
+  {
     role: "user",
     content:
-      "現在幾點？我在台北車站附近，請問現在天氣如何？順便告訴我附近還有沒有 YouBike 可以租？",
+      "現在幾點？台北天氣好嗎？",
   },
 ];
 
